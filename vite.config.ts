@@ -5,9 +5,6 @@
 
   export default defineConfig({
     plugins: [react()],
-    build: {
-    chunkSizeWarningLimit: 2000, // raises limit from 500kb to 2MB
-    },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -55,6 +52,7 @@
     build: {
       target: 'esnext',
       outDir: 'build',
+      chunkSizeWarningLimit:2000
     },
     server: {
       port: 3000,
