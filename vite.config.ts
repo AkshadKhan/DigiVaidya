@@ -5,6 +5,9 @@
 
   export default defineConfig({
     plugins: [react()],
+    build: {
+    chunkSizeWarningLimit: 2000, // raises limit from 500kb to 2MB
+    },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
