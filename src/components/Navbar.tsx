@@ -32,7 +32,7 @@ const navigationItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'patients', label: 'Patients', icon: Users },
   { id: 'records', label: 'Records', icon: FileText },
-  { id: 'prescriptions', label: 'Prescriptions', icon: Pill },
+  { id: 'diets', label: 'Diets', icon: Pill },
   { id: 'consultations', label: 'Consultations', icon: Calendar },
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   { id: 'settings', label: 'Settings', icon: Settings },

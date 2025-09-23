@@ -5,7 +5,7 @@ import { DoctorAuthPage } from './components/DoctorAuthPage';
 import { Dashboard } from './components/Dashboard';
 import { PatientsPage } from './components/PatientsPage';
 import { RecordsPage } from './components/RecordsPage';
-import { PrescriptionsPage } from './components/PrescriptionsPage';
+import { DietPage } from './components/DietPage';
 import { ConsultationsPage } from './components/ConsultationsPage';
 import { AnalyticsPage } from './components/AnalyticsPage';
 import { SettingsPage } from './components/SettingsPage';
@@ -60,8 +60,8 @@ export default function App() {
         return <PatientsPage />;
       case 'records':
         return <RecordsPage />;
-      case 'prescriptions':
-        return <PrescriptionsPage />;
+      case 'diets':
+        return <DietPage />;
       case 'consultations':
         return <ConsultationsPage />;
       case 'analytics':
