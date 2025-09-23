@@ -47,7 +47,8 @@
             "sonner": "^2.0.3",
             "tailwind-merge": "*",
             "vaul": "^1.1.2",
-            "vite": "^7.1.7"
+            "vite": "^7.1.7",
+            "zod": "^4.1.11"
       },
       "devDependencies": {
             "@types/node": "^20.10.0",

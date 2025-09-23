@@ -908,7 +908,7 @@ export function RecordsPage() {
           </DialogHeader>
           <div className="space-y-4">
             <Label>Patient</Label>
-            <Select value={formData.patientId} onValueChange={(v) => setFormData({ ...formData, patientId: v })}>
+            <Select value={formData.patientId} onValueChange={(v:any) => setFormData({ ...formData, patientId: v })}>
               <SelectTrigger>
                 <SelectValue placeholder="Select Patient" />
               </SelectTrigger>

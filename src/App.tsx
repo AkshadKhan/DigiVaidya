@@ -13,7 +13,7 @@ import { Footer } from './components/Footer';
 import { Toaster } from './components/ui/sonner';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('dashboard');
+  const [currentPage, setCurrentPage] = useState('dashzzzzzzzboard');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 

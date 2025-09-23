@@ -229,7 +229,7 @@ export function ConsultationsPage() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="appointment-patient">Patient *</Label>
-                <Select value={newAppointment.patientId} onValueChange={(value) => setNewAppointment({ ...newAppointment, patientId: value })}>
+                <Select value={newAppointment.patientId} onValueChange={(value:any) => setNewAppointment({ ...newAppointment, patientId: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select patient" />
                   </SelectTrigger>
@@ -256,7 +256,7 @@ export function ConsultationsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="appointment-time">Time *</Label>
-                  <Select value={newAppointment.time} onValueChange={(value) => setNewAppointment({ ...newAppointment, time: value })}>
+                  <Select value={newAppointment.time} onValueChange={(value:any) => setNewAppointment({ ...newAppointment, time: value })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select time" />
                     </SelectTrigger>
@@ -273,7 +273,7 @@ export function ConsultationsPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="appointment-type">Consultation Type</Label>
-                <Select value={newAppointment.type} onValueChange={(value) => setNewAppointment({ ...newAppointment, type: value })}>
+                <Select value={newAppointment.type} onValueChange={(value:any) => setNewAppointment({ ...newAppointment, type: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -335,7 +335,7 @@ export function ConsultationsPage() {
               <Calendar
                 mode="single"
                 selected={selectedDate}
-                onSelect={(date) => date && setSelectedDate(date)}
+                onSelect={(date:Date) => date && setSelectedDate(date)}
                 className="rounded-md border"
               />
             </CardContent>

@@ -1,153 +1,161 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { 
-  Search, 
-  Filter, 
-  Plus, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  Calendar,
-  Phone,
-  Mail,
-  MapPin,
-  User,
-  FileText
-} from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Search, UserPlus, Filter, Eye, Edit, Trash2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Label } from './ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
+import { Avatar, AvatarFallback } from './ui/avatar';
+import { Badge } from './ui/badge';
 import { toast } from 'sonner';
+import { AyurvedaPatientForm } from './AyurvedaPatientForm.tsx'
+import { PatientDetailsDialog } from './PatientDetailDialog.tsx';
 
-const mockPatients = [
-  {
-    id: 1,
-    name: 'John Smith',
-    age: 45,
-    gender: 'Male',
-    email: 'john.smith@email.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Main St, New York, NY',
-    lastVisit: '2024-01-15',
-    nextAppointment: '2024-01-25',
-    condition: 'Hypertension',
-    status: 'Active',
-    avatar: 'JS'
-  },
-  {
-    id: 2,
-    name: 'Emily Davis',
-    age: 32,
-    gender: 'Female',
-    email: 'emily.davis@email.com',
-    phone: '+1 (555) 987-6543',
-    address: '456 Oak Ave, Los Angeles, CA',
-    lastVisit: '2024-01-18',
-    nextAppointment: '2024-01-28',
-    condition: 'Diabetes',
-    status: 'Active',
-    avatar: 'ED'
-  },
-  {
-    id: 3,
-    name: 'Michael Johnson',
-    age: 28,
-    gender: 'Male',
-    email: 'michael.j@email.com',
-    phone: '+1 (555) 456-7890',
-    address: '789 Pine St, Chicago, IL',
-    lastVisit: '2024-01-12',
-    nextAppointment: null,
-    condition: 'Routine Checkup',
-    status: 'Inactive',
-    avatar: 'MJ'
-  },
-  {
-    id: 4,
-    name: 'Sarah Wilson',
-    age: 38,
-    gender: 'Female',
-    email: 'sarah.wilson@email.com',
-    phone: '+1 (555) 321-0987',
-    address: '321 Elm St, Houston, TX',
-    lastVisit: '2024-01-20',
-    nextAppointment: '2024-01-30',
-    condition: 'Asthma',
-    status: 'Active',
-    avatar: 'SW'
-  }
-];
+export interface Patient {
+  id: number;
+  name: string;
+  age: number;
+  gender: string;
+  email: string;
+  phone: string;
+  address: string;
+  lastVisit: string;
+  nextAppointment: string | null;
+  condition: string;
+  status: string;
+  avatar: string;
+  dosha: string;
+  healthIssues: string[];
+  goals: string[];
+  activityLevel: string;
+  bodyType: string;
+  sleepHours: number;
+  sleepQuality: string;
+  digestion: string;
+  skinTexture: string;
+  mentalState: string;
+  dietType?: string;
+  notes?: string;
+}
 
 export function PatientsPage() {
-  const [patients, setPatients] = useState(mockPatients);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterGender, setFilterGender] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
-  const [selectedPatient, setSelectedPatient] = useState<typeof mockPatients[0] | null>(null);
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
-  const [newPatient, setNewPatient] = useState({
-    name: '',
-    age: '',
-    gender: '',
-    email: '',
-    phone: '',
-    address: '',
-    condition: ''
-  });
-
-  const filteredPatients = patients.filter(patient => {
-    const matchesSearch = patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         patient.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         patient.condition.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesGender = filterGender === 'all' || patient.gender.toLowerCase() === filterGender;
-    const matchesStatus = filterStatus === 'all' || patient.status.toLowerCase() === filterStatus;
-    
-    return matchesSearch && matchesGender && matchesStatus;
-  });
-
-  const handleAddPatient = () => {
-    if (!newPatient.name || !newPatient.email || !newPatient.phone) {
-      toast.error('Please fill in all required fields');
-      return;
+  const [patients, setPatients] = useState<Patient[]>([
+    {
+      id: 1,
+      name: 'Priya Sharma',
+      age: 34,
+      gender: 'Female',
+      email: 'priya.sharma@email.com',
+      phone: '+91 98765 43210',
+      address: '123 MG Road, Bangalore',
+      lastVisit: '2024-01-15',
+      nextAppointment: '2024-02-15',
+      condition: 'Digestive Issues',
+      status: 'Active',
+      avatar: 'PS',
+      dosha: 'Vata-Pitta',
+      healthIssues: ['digestive'],
+      goals: ['improve-energy'],
+      activityLevel: 'moderate',
+      bodyType: 'normal',
+      sleepHours: 7,
+      sleepQuality: 'fair',
+      digestion: 'bloating-gas',
+      skinTexture: 'dry',
+      mentalState: 'anxious',
+    },
+    {
+      id: 2,
+      name: 'Rajesh Kumar',
+      age: 45,
+      gender: 'Male',
+      email: 'rajesh.kumar@email.com',
+      phone: '+91 87654 32109',
+      address: '456 Park Street, Mumbai',
+      lastVisit: '2024-01-10',
+      nextAppointment: null,
+      condition: 'Joint Pain',
+      status: 'Active',
+      avatar: 'RK',
+      dosha: 'Kapha',
+      healthIssues: ['joint'],
+      goals: ['reduce-stress'],
+      activityLevel: 'light',
+      bodyType: 'overweight',
+      sleepHours: 8,
+      sleepQuality: 'good',
+      digestion: 'slow',
+      skinTexture: 'oily',
+      mentalState: 'calm',
     }
+  ]);
 
-    const patient = {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [genderFilter, setGenderFilter] = useState('all');
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+
+  const handleAddPatient = (patientData: any) => {
+    const newPatient: Patient = {
       id: patients.length + 1,
-      ...newPatient,
-      age: parseInt(newPatient.age),
+      name: patientData.name,
+      age: patientData.age,
+      gender: patientData.gender,
+      email: `${patientData.name.toLowerCase().replace(/\s+/g, '.')}@email.com`,
+      phone: '+91 98765 43210', // Default for demo
+      address: 'Address not provided',
       lastVisit: new Date().toISOString().split('T')[0],
       nextAppointment: null,
+      condition: patientData.healthIssues.length > 0 ? 
+        patientData.healthIssues.map((issue: string) => 
+          issue.charAt(0).toUpperCase() + issue.slice(1).replace('-', ' ')
+        ).join(', ') : 'General Consultation',
       status: 'Active',
-      avatar: newPatient.name.split(' ').map(n => n[0]).join('')
+      avatar: patientData.name.split(' ').map((n: string) => n[0]).join(''),
+      dosha: 'Assessment Pending',
+      healthIssues: patientData.healthIssues,
+      goals: patientData.goals,
+      activityLevel: patientData.activityLevel,
+      bodyType: patientData.bodyType,
+      sleepHours: patientData.sleepHours,
+      sleepQuality: patientData.sleepQuality,
+      digestion: patientData.digestion,
+      skinTexture: patientData.skinTexture,
+      mentalState: patientData.mentalState,
+      dietType: patientData.dietType,
+      notes: patientData.notes || '',
     };
 
-    setPatients([...patients, patient]);
-    setNewPatient({
-      name: '',
-      age: '',
-      gender: '',
-      email: '',
-      phone: '',
-      address: '',
-      condition: ''
-    });
-    setIsAddDialogOpen(false);
+    setPatients([...patients, newPatient]);
     toast.success('Patient added successfully!');
   };
 
   const handleDeletePatient = (id: number) => {
     setPatients(patients.filter(p => p.id !== id));
-    toast.success('Patient removed successfully');
+    toast.success('Patient deleted successfully!');
   };
 
+  const filteredPatients = patients.filter(patient => {
+    const searchLower = searchTerm.toLowerCase();
+    const matchesSearch = 
+      patient.name.toLowerCase().includes(searchLower) ||
+      patient.email.toLowerCase().includes(searchLower) ||
+      patient.phone.includes(searchTerm) ||
+      patient.condition.toLowerCase().includes(searchLower) ||
+      patient.dosha.toLowerCase().includes(searchLower);
+
+    const matchesStatus = statusFilter === 'all' || 
+      patient.status.toLowerCase() === statusFilter.toLowerCase();
+
+    const matchesGender = genderFilter === 'all' || 
+      patient.gender.toLowerCase() === genderFilter.toLowerCase();
+
+    return matchesSearch && matchesStatus && matchesGender;
+  });
+
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="max-w-7xl mx-auto p-6 space-y-8">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -155,107 +163,11 @@ export function PatientsPage() {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold">Patients</h1>
-          <p className="text-muted-foreground">Manage your patient records and information</p>
+          <h1>Patient Management</h1>
+          <p className="text-muted-foreground">Comprehensive Ayurvedic patient records and assessments</p>
         </div>
         
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="glow-button">
-              <Plus className="mr-2 h-4 w-4" />
-              Add Patient
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle>Add New Patient</DialogTitle>
-              <DialogDescription>
-                Enter patient information to create a new record.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="patient-name">Full Name *</Label>
-                <Input
-                  id="patient-name"
-                  placeholder="John Smith"
-                  value={newPatient.name}
-                  onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="patient-age">Age</Label>
-                  <Input
-                    id="patient-age"
-                    type="number"
-                    placeholder="30"
-                    value={newPatient.age}
-                    onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="patient-gender">Gender</Label>
-                  <Select value={newPatient.gender} onValueChange={(value) => setNewPatient({ ...newPatient, gender: value })}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="patient-email">Email *</Label>
-                <Input
-                  id="patient-email"
-                  type="email"
-                  placeholder="john@example.com"
-                  value={newPatient.email}
-                  onChange={(e) => setNewPatient({ ...newPatient, email: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="patient-phone">Phone *</Label>
-                <Input
-                  id="patient-phone"
-                  placeholder="+1 (555) 123-4567"
-                  value={newPatient.phone}
-                  onChange={(e) => setNewPatient({ ...newPatient, phone: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="patient-address">Address</Label>
-                <Input
-                  id="patient-address"
-                  placeholder="123 Main St, City, State"
-                  value={newPatient.address}
-                  onChange={(e) => setNewPatient({ ...newPatient, address: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="patient-condition">Primary Condition</Label>
-                <Input
-                  id="patient-condition"
-                  placeholder="Hypertension, Diabetes, etc."
-                  value={newPatient.condition}
-                  onChange={(e) => setNewPatient({ ...newPatient, condition: e.target.value })}
-                />
-              </div>
-              <div className="flex justify-end space-x-2 pt-4">
-                <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={handleAddPatient} className="glow-button">
-                  Add Patient
-                </Button>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <AyurvedaPatientForm onSubmit={handleAddPatient} />
       </motion.div>
 
       {/* Search and Filters */}
@@ -264,22 +176,22 @@ export function PatientsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Card className="glass">
+        <Card>
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search patients by name, email, or condition..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
                 />
               </div>
               <div className="flex gap-2">
-                <Select value={filterGender} onValueChange={setFilterGender}>
+                <Select value={genderFilter} onValueChange={setGenderFilter}>
                   <SelectTrigger className="w-32">
-                    <Filter className="mr-2 h-4 w-4" />
+                    <Filter className="h-4 w-4 text-muted-foreground" />
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -288,12 +200,13 @@ export function PatientsPage() {
                     <SelectItem value="female">Female</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select value={filterStatus} onValueChange={setFilterStatus}>
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
+                
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="all">All Patients</SelectItem>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
@@ -310,9 +223,14 @@ export function PatientsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <Card className="glass">
+        <Card>
           <CardHeader>
-            <CardTitle>Patient Records ({filteredPatients.length})</CardTitle>
+            <CardTitle>
+              Patient Records ({filteredPatients.length})
+            </CardTitle>
+            <CardDescription>
+              Comprehensive Ayurvedic patient database
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -321,6 +239,7 @@ export function PatientsPage() {
                   <TableHead>Patient</TableHead>
                   <TableHead>Age</TableHead>
                   <TableHead>Gender</TableHead>
+                  <TableHead>Dosha</TableHead>
                   <TableHead>Last Visit</TableHead>
                   <TableHead>Next Appointment</TableHead>
                   <TableHead>Status</TableHead>
@@ -333,34 +252,49 @@ export function PatientsPage() {
                     key={patient.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    whileHover={{ backgroundColor: 'rgba(0, 0, 0, 0.02)' }}
+                    whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
                     className="cursor-pointer"
                   >
-                    <TableCell className="font-medium">
+                    <TableCell>
                       <div className="flex items-center space-x-3">
                         <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+                          <AvatarFallback className="bg-primary text-primary-foreground">
                             {patient.avatar}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <p className="font-medium">{patient.name}</p>
-                          <p className="text-sm text-muted-foreground">{patient.condition}</p>
+                          <p>{patient.name}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {patient.condition}
+                          </p>
                         </div>
                       </div>
                     </TableCell>
                     <TableCell>{patient.age}</TableCell>
                     <TableCell>{patient.gender}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        {patient.dosha}
+                      </Badge>
+                    </TableCell>
                     <TableCell>{patient.lastVisit}</TableCell>
                     <TableCell>
                       {patient.nextAppointment ? (
-                        <Badge variant="outline">{patient.nextAppointment}</Badge>
+                        <Badge variant="outline">
+                          {patient.nextAppointment}
+                        </Badge>
                       ) : (
-                        <span className="text-muted-foreground">Not scheduled</span>
+                        <span className="text-muted-foreground">
+                          Not scheduled
+                        </span>
                       )}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={patient.status === 'Active' ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={
+                          patient.status === "Active" ? "default" : "secondary"
+                        }
+                      >
                         {patient.status}
                       </Badge>
                     </TableCell>
@@ -395,89 +329,10 @@ export function PatientsPage() {
       </motion.div>
 
       {/* Patient Details Dialog */}
-      <Dialog open={!!selectedPatient} onOpenChange={() => setSelectedPatient(null)}>
-        <DialogContent className="max-w-2xl">
-          {selectedPatient && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="flex items-center space-x-3">
-                  <Avatar className="h-12 w-12">
-                    <AvatarFallback className="bg-primary text-primary-foreground">
-                      {selectedPatient.avatar}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h2>{selectedPatient.name}</h2>
-                    <p className="text-sm text-muted-foreground">{selectedPatient.condition}</p>
-                  </div>
-                </DialogTitle>
-              </DialogHeader>
-              <div className="space-y-6">
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h3 className="font-semibold">Personal Information</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Age: {selectedPatient.age} years</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Gender: {selectedPatient.gender}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{selectedPatient.email}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{selectedPatient.phone}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{selectedPatient.address}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
-                    <h3 className="font-semibold">Medical Information</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Last Visit: {selectedPatient.lastVisit}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          Next Appointment: {selectedPatient.nextAppointment || 'Not scheduled'}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <FileText className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">Primary Condition: {selectedPatient.condition}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-end space-x-2 pt-4 border-t">
-                  <Button variant="outline">
-                    <FileText className="mr-2 h-4 w-4" />
-                    View Records
-                  </Button>
-                  <Button variant="outline">
-                    <Calendar className="mr-2 h-4 w-4" />
-                    Schedule Appointment
-                  </Button>
-                  <Button className="glow-button">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Patient
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
+      <PatientDetailsDialog 
+        patient={selectedPatient} 
+        onClose={() => setSelectedPatient(null)} 
+      />
     </div>
   );
 }
