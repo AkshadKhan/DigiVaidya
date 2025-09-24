@@ -7,13 +7,13 @@ import { PatientsPage } from './components/PatientsPage';
 import { RecordsPage } from './components/RecordsPage';
 import { DietPage } from './components/DietPage';
 import { ConsultationsPage } from './components/ConsultationsPage';
-import { AnalyticsPage } from './components/AnalyticsPage';
+// import { AnalyticsPage } from './components/AnalyticsPage';
 import { SettingsPage } from './components/SettingsPage';
 import { Footer } from './components/Footer';
 import { Toaster } from './components/ui/sonner';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('dashzzzzzzzboard');
+  const [currentPage, setCurrentPage] = useState('dashboard');
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -64,8 +64,8 @@ export default function App() {
         return <DietPage />;
       case 'consultations':
         return <ConsultationsPage />;
-      case 'analytics':
-        return <AnalyticsPage />;
+      // case 'analytics':
+      //   return <AnalyticsPage />;
       case 'settings':
         return <SettingsPage />;
       default:

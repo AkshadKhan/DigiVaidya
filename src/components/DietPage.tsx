@@ -1,18 +1,26 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Avatar, AvatarFallback } from './ui/avatar';
-import { Badge } from './ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { Label } from './ui/label';
-import { Textarea } from './ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Search, Plus, Eye, Edit, Trash2, Users, Save, X } from 'lucide-react';
-import { DietPlan } from './DietPlan';
-import { AusadhiPlan } from './AushadhiPlan';
-import { AyurvedaPatientForm } from './AyurvedaPatientForm';
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Input } from "./ui/input";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Badge } from "./ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area.tsx";
+import { Search, Plus, Eye, Edit, Trash2, Users, Save, X } from "lucide-react";
+import { DietPlan } from "./DietPlan";
+import { AusadhiPlan } from "./AushadhiPlan";
+import { AyurvedaPatientForm } from "./AyurvedaPatientForm.tsx";
+
 
 interface Patient {
   id: string;
@@ -21,7 +29,7 @@ interface Patient {
   gender: string;
   lastVisit: string;
   dietType: string;
-  status: 'active' | 'completed' | 'pending';
+  status: "active" | "completed" | "pending";
   initials: string;
 }
 
@@ -43,87 +51,92 @@ interface PatientFormData {
 
 const mockPatientsData: Patient[] = [
   {
-    id: '1',
-    name: 'John Smith',
+    id: "1",
+    name: "John Smith",
     age: 45,
-    gender: 'Male',
-    lastVisit: '2024-01-20',
-    dietType: 'Vata Balancing',
-    status: 'active',
-    initials: 'JS'
+    gender: "Male",
+    lastVisit: "2024-01-20",
+    dietType: "Vata Balancing",
+    status: "active",
+    initials: "JS",
   },
   {
-    id: '2', 
-    name: 'Emily Davis',
+    id: "2",
+    name: "Emily Davis",
     age: 32,
-    gender: 'Female',
-    lastVisit: '2024-01-18',
-    dietType: 'Pitta Balancing',
-    status: 'completed',
-    initials: 'ED'
+    gender: "Female",
+    lastVisit: "2024-01-18",
+    dietType: "Pitta Balancing",
+    status: "completed",
+    initials: "ED",
   },
   {
-    id: '3',
-    name: 'Michael Johnson',
+    id: "3",
+    name: "Michael Johnson",
     age: 38,
-    gender: 'Male', 
-    lastVisit: '2024-01-15',
-    dietType: 'Kapha Balancing',
-    status: 'pending',
-    initials: 'MJ'
+    gender: "Male",
+    lastVisit: "2024-01-15",
+    dietType: "Kapha Balancing",
+    status: "pending",
+    initials: "MJ",
   },
   {
-    id: '4',
-    name: 'Sarah Wilson',
+    id: "4",
+    name: "Sarah Wilson",
     age: 29,
-    gender: 'Female',
-    lastVisit: '2024-01-12',
-    dietType: 'Tridoshic',
-    status: 'active',
-    initials: 'SW'
-  }
+    gender: "Female",
+    lastVisit: "2024-01-12",
+    dietType: "Tridoshic",
+    status: "active",
+    initials: "SW",
+  },
 ];
 
 const dietTypes = [
-  'Vata Balancing',
-  'Pitta Balancing',
-  'Kapha Balancing',
-  'Tridoshic',
-  'Detox Diet',
-  'Weight Management'
+  "Vata Balancing",
+  "Pitta Balancing",
+  "Kapha Balancing",
+  "Tridoshic",
+  "Detox Diet",
+  "Weight Management",
 ];
 
 export function DietPage() {
   const [patients, setPatients] = useState<Patient[]>(mockPatientsData);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [genderFilter, setGenderFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [genderFilter, setGenderFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
   const [isDietModalOpen, setIsDietModalOpen] = useState(false);
   const [isEditDietModalOpen, setIsEditDietModalOpen] = useState(false);
   const [isAddPatientModalOpen, setIsAddPatientModalOpen] = useState(false);
+  
+const [isAddPatientFormVisible, setIsAddPatientFormVisible] = useState(false);
   const [editingPatient, setEditingPatient] = useState<Patient | null>(null);
   const [dietFormData, setDietFormData] = useState<DietFormData>({
-    dietType: '',
-    description: '',
-    allergies: '',
-    restrictions: '',
-    goals: '',
-    duration: ''
+    dietType: "",
+    description: "",
+    allergies: "",
+    restrictions: "",
+    goals: "",
+    duration: "",
   });
   const [patientFormData, setPatientFormData] = useState<PatientFormData>({
-    name: '',
-    age: '',
-    gender: '',
-    dietType: ''
+    name: "",
+    age: "",
+    gender: "",
+    dietType: "",
   });
 
-  const filteredPatients = patients.filter(patient => {
-    const matchesSearch = patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         patient.dietType.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesGender = genderFilter === 'all' || patient.gender === genderFilter;
-    const matchesStatus = statusFilter === 'all' || patient.status === statusFilter;
-    
+  const filteredPatients = patients.filter((patient) => {
+    const matchesSearch =
+      patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.dietType.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGender =
+      genderFilter === "all" || patient.gender === genderFilter;
+    const matchesStatus =
+      statusFilter === "all" || patient.status === statusFilter;
+
     return matchesSearch && matchesGender && matchesStatus;
   });
 
@@ -136,30 +149,30 @@ export function DietPage() {
     setEditingPatient(patient);
     setDietFormData({
       dietType: patient.dietType,
-      description: 'Personalized diet plan based on Ayurvedic principles',
-      allergies: '',
-      restrictions: '',
-      goals: 'Balance doshas and improve overall health',
-      duration: '30 days'
+      description: "Personalized diet plan based on Ayurvedic principles",
+      allergies: "",
+      restrictions: "",
+      goals: "Balance doshas and improve overall health",
+      duration: "30 days",
     });
     setIsEditDietModalOpen(true);
   };
 
   const handleAddPatient = () => {
     setPatientFormData({
-      name: '',
-      age: '',
-      gender: '',
-      dietType: ''
+      name: "",
+      age: "",
+      gender: "",
+      dietType: "",
     });
     setIsAddPatientModalOpen(true);
   };
 
   const handleSaveDiet = () => {
     if (editingPatient) {
-      setPatients(prev => 
-        prev.map(patient => 
-          patient.id === editingPatient.id 
+      setPatients((prev) =>
+        prev.map((patient) =>
+          patient.id === editingPatient.id
             ? { ...patient, dietType: dietFormData.dietType }
             : patient
         )
@@ -167,76 +180,106 @@ export function DietPage() {
       setIsEditDietModalOpen(false);
       setEditingPatient(null);
       setDietFormData({
-        dietType: '',
-        description: '',
-        allergies: '',
-        restrictions: '',
-        goals: '',
-        duration: ''
+        dietType: "",
+        description: "",
+        allergies: "",
+        restrictions: "",
+        goals: "",
+        duration: "",
       });
     }
   };
 
   const handleSavePatient = () => {
-    if (patientFormData.name && patientFormData.age && patientFormData.gender && patientFormData.dietType) {
+    if (
+      patientFormData.name &&
+      patientFormData.age &&
+      patientFormData.gender &&
+      patientFormData.dietType
+    ) {
       const newPatient: Patient = {
         id: (patients.length + 1).toString(),
         name: patientFormData.name,
         age: parseInt(patientFormData.age),
         gender: patientFormData.gender,
-        lastVisit: new Date().toISOString().split('T')[0],
+        lastVisit: new Date().toISOString().split("T")[0],
         dietType: patientFormData.dietType,
-        status: 'active',
-        initials: patientFormData.name.split(' ').map(n => n[0]).join('').toUpperCase()
+        status: "active",
+        initials: patientFormData.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase(),
       };
-      
-      setPatients(prev => [...prev, newPatient]);
+
+      setPatients((prev) => [...prev, newPatient]);
       setIsAddPatientModalOpen(false);
       setPatientFormData({
-        name: '',
-        age: '',
-        gender: '',
-        dietType: ''
+        name: "",
+        age: "",
+        gender: "",
+        dietType: "",
       });
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active':
-        return 'bg-green-100 text-green-800 border-green-200';
-      case 'completed':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'pending':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case "active":
+        return "bg-green-100 text-green-800 border-green-200";
+      case "completed":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "pending":
+        return "bg-orange-100 text-orange-800 border-orange-200";
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-6 space-y-6">
+    <div className="w-full max-w-7xl mx-auto p-6 space-y-6 scroll-y:auto">
+     <div className="w-full max-w-7xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-green-100 rounded-full">
-              <Users className="w-6 h-6 text-green-600" />
-            </div>
-            <h1 className="text-green-800 text-4xl font-bold">Ayurvedic Diet Plans</h1>
-          </div>
-          <p className="text-muted-foreground">
-            Digital personalized diet plan management
-          </p>
-        </div>
-        <Button 
-          className="bg-green-600 hover:bg-green-700 text-white"
-          onClick={handleAddPatient}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Patient
-        </Button>
-      </div>
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <div className="flex items-center gap-3 mb-2">
+    <div className="p-2 bg-green-600 rounded-full">
+      <Users className="w-6 h-6 text-green-600" />
+    </div>
+    <h1 className="fw-bold text-black fs-1 ">Ayurvedic Diet Plans</h1>
+  </div>
+
+  <div className="ml-auto">
+    {/* {!isAddPatientFormVisible && (
+      <Button
+        className="bg-green-600 hover:bg-green-700 text-white"
+        onClick={() => setIsAddPatientFormVisible(true)}
+      >
+        <Plus className="w-4 h-4 mr-2" />
+        Add Patient
+      </Button>
+    )} */}
+  </div>
+  <Card className="bg-white border ml-auto">
+    <AyurvedaPatientForm
+      onSubmit={(data) => {
+        const newPatient: Patient = {
+          id: (patients.length + 1).toString(),
+          name: data.name,
+          age: data.age,
+          gender: data.gender,
+          lastVisit: new Date().toISOString().split("T")[0],
+          dietType: data.dietType,
+          status: "active",
+          initials: data.name.split(" ").map((n) => n[0]).join("").toUpperCase(),
+        };
+        setPatients([...patients, newPatient]);
+        setIsAddPatientFormVisible(false); // hide form after adding
+      }}
+    />
+  </Card>
+</div>
+
+
 
       {/* Search Bar */}
       <Card>
@@ -305,7 +348,10 @@ export function DietPage() {
               </thead>
               <tbody>
                 {filteredPatients.map((patient) => (
-                  <tr key={patient.id} className="border-b hover:bg-muted/30 transition-colors">
+                  <tr
+                    key={patient.id}
+                    className="border-b hover:bg-muted/30 transition-colors"
+                  >
                     <td className="p-4">
                       <div className="flex items-center gap-3">
                         <Avatar className="w-8 h-8">
@@ -315,20 +361,29 @@ export function DietPage() {
                         </Avatar>
                         <div>
                           <p>{patient.name}</p>
-                          <p className="text-sm text-muted-foreground">{patient.gender}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {patient.gender}
+                          </p>
                         </div>
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className="text-muted-foreground">{patient.age} years</span>
+                      <span className="text-muted-foreground">
+                        {patient.age} years
+                      </span>
                     </td>
                     <td className="p-4">
-                      <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                      <Badge
+                        variant="outline"
+                        className="bg-blue-50 text-blue-700 border-blue-200"
+                      >
                         {patient.dietType}
                       </Badge>
                     </td>
                     <td className="p-4">
-                      <span className="text-muted-foreground">{patient.lastVisit}</span>
+                      <span className="text-muted-foreground">
+                        {patient.lastVisit}
+                      </span>
                     </td>
                     <td className="p-4">
                       <Badge className={getStatusColor(patient.status)}>
@@ -375,8 +430,11 @@ export function DietPage() {
 
       {/* Treatment Plan Modal */}
       <Dialog open={isDietModalOpen} onOpenChange={setIsDietModalOpen}>
-        <DialogContent className="max-w-7xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent
+          className="w-full max-w-10xl md:max-w-11xl lg:max-w-12xl p-6 md:p-8 overflow-y-auto"
+          style={{ maxHeight: "90vh" }}
+        >
+          <DialogHeader className="p-4 shrink-0">
             <DialogTitle className="flex items-center gap-3">
               {selectedPatient && (
                 <>
@@ -395,16 +453,22 @@ export function DietPage() {
               )}
             </DialogTitle>
           </DialogHeader>
-          <div className="mt-4">
+
+          {/* Scrollable body */}
+          <div className="flex-1 overflow-y-auto p-4">
             <Tabs defaultValue="diet" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="diet" className="flex items-center gap-2">
                   <span>Diet Plan</span>
                 </TabsTrigger>
-                <TabsTrigger value="ausadhi" className="flex items-center gap-2">
-                  <span>Ausadhi (Herbs)</span>
+                <TabsTrigger
+                  value="ausadhi"
+                  className="flex items-center gap-2"
+                >
+                  <span>Aushadhi (Herbs)</span>
                 </TabsTrigger>
               </TabsList>
+
               <TabsContent value="diet" className="mt-4">
                 <DietPlan />
               </TabsContent>
@@ -438,20 +502,24 @@ export function DietPage() {
               )}
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-6 mt-4">
             <div className="space-y-2">
               <Label htmlFor="dietType">Diet Type</Label>
-              <Select 
-                value={dietFormData.dietType} 
-                onValueChange={(value:any) => setDietFormData(prev => ({ ...prev, dietType: value }))}
+              <Select
+                value={dietFormData.dietType}
+                onValueChange={(value: any) =>
+                  setDietFormData((prev) => ({ ...prev, dietType: value }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select diet type" />
                 </SelectTrigger>
                 <SelectContent>
                   {dietTypes.map((type) => (
-                    <SelectItem key={type} value={type}>{type}</SelectItem>
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -463,7 +531,12 @@ export function DietPage() {
                 id="description"
                 placeholder="Enter diet plan description..."
                 value={dietFormData.description}
-                onChange={(e) => setDietFormData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) =>
+                  setDietFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 rows={3}
               />
             </div>
@@ -475,15 +548,22 @@ export function DietPage() {
                   id="allergies"
                   placeholder="e.g., nuts, dairy, gluten"
                   value={dietFormData.allergies}
-                  onChange={(e) => setDietFormData(prev => ({ ...prev, allergies: e.target.value }))}
+                  onChange={(e) =>
+                    setDietFormData((prev) => ({
+                      ...prev,
+                      allergies: e.target.value,
+                    }))
+                  }
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="duration">Plan Duration</Label>
-                <Select 
-                  value={dietFormData.duration} 
-                  onValueChange={(value:any) => setDietFormData(prev => ({ ...prev, duration: value }))}
+                <Select
+                  value={dietFormData.duration}
+                  onValueChange={(value: any) =>
+                    setDietFormData((prev) => ({ ...prev, duration: value }))
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select duration" />
@@ -505,7 +585,12 @@ export function DietPage() {
                 id="restrictions"
                 placeholder="Enter any specific dietary restrictions..."
                 value={dietFormData.restrictions}
-                onChange={(e) => setDietFormData(prev => ({ ...prev, restrictions: e.target.value }))}
+                onChange={(e) =>
+                  setDietFormData((prev) => ({
+                    ...prev,
+                    restrictions: e.target.value,
+                  }))
+                }
                 rows={2}
               />
             </div>
@@ -516,21 +601,26 @@ export function DietPage() {
                 id="goals"
                 placeholder="Enter specific health goals for this diet plan..."
                 value={dietFormData.goals}
-                onChange={(e) => setDietFormData(prev => ({ ...prev, goals: e.target.value }))}
+                onChange={(e) =>
+                  setDietFormData((prev) => ({
+                    ...prev,
+                    goals: e.target.value,
+                  }))
+                }
                 rows={2}
               />
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => setIsEditDietModalOpen(false)}
                 className="flex items-center gap-2"
               >
                 <X className="w-4 h-4" />
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleSaveDiet}
                 className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
               >
@@ -543,25 +633,55 @@ export function DietPage() {
       </Dialog>
 
       {/* Add Patient Modal */}
-      <Dialog open={isAddPatientModalOpen} onOpenChange={setIsAddPatientModalOpen}>
+      <Dialog
+        open={isAddPatientModalOpen}
+        onOpenChange={setIsAddPatientModalOpen}
+      >
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-3">
+            {/* <DialogTitle className="flex items-center gap-3">
               <div className="p-2 bg-green-100 rounded-full">
                 <Plus className="w-5 h-5 text-green-600" />
               </div>
               <h3>Add New Patient</h3>
             </DialogTitle>
+          </DialogHeader> */}
+
+            <div className="mt-4">
+              {/* Import the complete patient form component */}
+              <AyurvedaPatientForm
+                onSubmit={function (data: {
+                  name: string;
+                  age: number;
+                  ageGroup: string;
+                  gender: string;
+                  bodyType: string;
+                  activityLevel: string;
+                  healthIssues: string[];
+                  sleepHours: number;
+                  sleepQuality: string;
+                  temperaturePreference: string;
+                  digestion: string;
+                  skinTexture: string;
+                  mentalState: string;
+                  afterMealFeeling: string;
+                  craveSpecificFoods: string;
+                  goals: string[];
+                  dietStrictness: string;
+                  mainMealsPerDay: number;
+                  dietType: string;
+                  recipePortionGuidelines: boolean;
+                  recipeMealtimeAligned: boolean;
+                  includeAnimalProtein: boolean;
+                }): void {
+                  throw new Error("Function not implemented.");
+                }}
+              />
+            </div>
           </DialogHeader>
-          
-          <div className="mt-4">
-            {/* Import the complete patient form component */}
-            <AyurvedaPatientForm onSubmit={function (data: { name: string; age: number; ageGroup: string; gender: string; bodyType: string; activityLevel: string; healthIssues: string[]; sleepHours: number; sleepQuality: string; temperaturePreference: string; digestion: string; skinTexture: string; mentalState: string; afterMealFeeling: string; craveSpecificFoods: string; goals: string[]; dietStrictness: string; mainMealsPerDay: number; dietType: string; recipePortionGuidelines: boolean; recipeMealtimeAligned: boolean; includeAnimalProtein: boolean; }): void {
-              throw new Error('Function not implemented.');
-            } } />
-          </div>
         </DialogContent>
       </Dialog>
+      </div>
     </div>
   );
 }

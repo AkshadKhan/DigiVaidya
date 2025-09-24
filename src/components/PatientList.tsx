@@ -6,11 +6,11 @@ import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Clock, Utensils, Apple, Coffee, Edit, Save, X, Plus, Trash2 } from 'lucide-react';
 
-
 interface MealItem {
   time: string;
   meal: string;
   items: string[];
+  icon: JSX.Element;
 }
 
 interface DietPlanProps {
@@ -26,26 +26,31 @@ export function DietPlan({ isEditable = false, onSave }: DietPlanProps) {
       time: '6:00 AM',
       meal: 'Early Morning',
       items: ['Warm water with lemon', 'Ginger tea'],
+      icon: <Coffee className="w-4 h-4" />
     },
     {
       time: '8:00 AM',
       meal: 'Breakfast',
       items: ['Quinoa porridge with dates', 'Almonds (soaked)', 'Fresh fruits'],
+      icon: <Apple className="w-4 h-4" />
     },
     {
       time: '12:00 PM',
       meal: 'Lunch',
       items: ['Rice with dal', 'Steamed vegetables', 'Ghee', 'Yogurt'],
+      icon: <Utensils className="w-4 h-4" />
     },
     {
       time: '4:00 PM',
       meal: 'Snack',
       items: ['Herbal tea', 'Nuts and seeds'],
+      icon: <Coffee className="w-4 h-4" />
     },
     {
       time: '7:00 PM',
       meal: 'Dinner',
       items: ['Light soup', 'Roti with vegetables', 'Herbal tea'],
+      icon: <Utensils className="w-4 h-4" />
     }
   ]);
 
@@ -138,12 +143,12 @@ export function DietPlan({ isEditable = false, onSave }: DietPlanProps) {
   return (
     <div className="space-y-6">
       {/* Diet Plan Overview */}
-      <Card className='overflow-y:auto'>
+      <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Utensils className="w-5 h-5 text-green-600" />
-              <span className="text-5xl font-bold">Daily Meal Plan</span>
+              <span className="text-black">Daily Meal Plan</span>
             </CardTitle>
             {isEditable && (
               <div className="flex gap-2">

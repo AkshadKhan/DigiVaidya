@@ -12,6 +12,14 @@ import { toast } from 'sonner';
 import { AyurvedaPatientForm } from './AyurvedaPatientForm.tsx'
 import { PatientDetailsDialog } from './PatientDetailDialog.tsx';
 
+
+<motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      ></motion.div>
+
+
 export interface Patient {
   id: number;
   name: string;
